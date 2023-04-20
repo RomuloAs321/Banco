@@ -1,0 +1,39 @@
+@startuml name
+
+
+class AbrirConta {
+    - numeroConta: int
+    - nomeTitular: string
+    + abrir(): void
+}
+
+class DepositarNaConta {
+    - valor: float
+    - numeroConta: int
+    + depositar(): void
+}
+
+class TransferirParaOutraConta {
+    - valor: float
+    - contaOrigem: int
+    - contaDestino: int
+    + transferir(): void
+}
+
+class EmitirExtrato {
+    - numeroConta: int
+    + emitir(): void
+}
+
+class SacarDaConta {
+    - valor: float
+    - numeroConta: int
+    + sacar(): void
+}
+
+AbrirConta --> DepositarNaConta
+DepositarNaConta --> TransferirParaOutraConta
+TransferirParaOutraConta --> EmitirExtrato
+EmitirExtrato --> SacarDaConta
+
+@enduml
