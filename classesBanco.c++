@@ -1,3 +1,4 @@
+
 #include <string>
 #include <iostream>
 #include <vector>
@@ -86,6 +87,57 @@ public:
     }
 };
 
+
+
+class TransferirEntreContas {
+private:
+    float valor;
+    int numeroContaOrigem;
+    int numeroContaDestino;
+public:
+    void solicitarDados() {
+        cout << "Informe o valor a ser transferido: ";
+        cin >> valor;
+        cout << "Informe o número da conta de origem: ";
+        cin >> numeroContaOrigem;
+        cout << "Informe o número da conta de destino: ";
+        cin >> numeroContaDestino;
+    }
+    void transferir(vector<Conta>& contas) {
+        Conta* contaOrigem = nullptr;
+        Conta* contaDestino = nullptr;
+
+        for (auto& conta : contas) {
+            if (conta.getNumeroConta() == numeroContaOrigem) {
+                contaOrigem = &conta;
+            } else if (conta.getNumeroConta() == numeroContaDestino) {
+                contaDestino = &conta;
+            }
+
+            if (contaOrigem != nullptr && contaDestino != nullptr) {
+                break;
+            }
+        }
+
+        if (contaOrigem == nullptr) {
+            cout << "Conta de origem não encontrada." << endl;
+        } else if (contaDestino == nullptr) {
+            cout << "Conta de destino não encontrada." << endl;
+        } else {
+            float saldoOrigem = contaOrigem->getSaldo();
+            if (valor > saldoOrigem) {
+                cout << "Saldo insuficiente na conta de origem." << endl;
+            } else {
+                contaOrigem->setSaldo(saldoOrigem - valor);
+                float saldoDestino = contaDestino->getSaldo();
+                contaDestino->setSaldo(saldoDestino + valor);
+                cout << "Transferência realizada." << endl;
+                cout << "Novo saldo da conta de origem: " << contaOrigem->getSaldo() << endl;
+                cout << "Novo saldo da conta de destino: " << contaDestino->getSaldo() << endl;
+            }
+        }
+    }
+};
 class SacarDaConta {
 private:
     float valor;
@@ -119,14 +171,15 @@ public:
 int main() {
     vector<Conta> contas;
     int opcao = 0;
-    while (opcao != 5) {
+    while (opcao != 6) {
         cout << endl;
         cout << "Selecione uma opção:" << endl;
         cout << "1 - Abrir conta" << endl;
         cout << "2 - Depositar na conta" << endl;
         cout << "3 - Sacar da conta" << endl;
         cout << "4 - Emitir extrato da conta" << endl;
-        cout << "5 - Sair" << endl;
+        cout << "5 - Transferencia entre contas" << endl;
+        cout << "6 - Sair" << endl;
         cin >> opcao;
         switch (opcao) {
             case 1: {
@@ -159,9 +212,18 @@ int main() {
                 }
                 break;
             }
-            case 5:
-                cout << "Encerrando programa." << endl;
-                break;
+                case 5: {
+               TransferirEntreContas transferirEntreContas;
+               transferirEntreContas.solicitarDados();
+               transferirEntreContas.transferir(contas);
+               break;
+
+               }
+                
+            case 6:
+              cout<<"Finalizado."<<endl;
+            break;
+
             default:
                 cout << "Opção inválida." << endl;
                 break;
